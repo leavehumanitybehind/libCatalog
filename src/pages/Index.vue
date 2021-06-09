@@ -55,7 +55,6 @@
 </template>
 <script>
 import axios from "axios";
-import libs from "../libraries.json";
 
 export default {
   name: "PageIndex",
@@ -64,18 +63,24 @@ export default {
       libraries: [],
       search: "",
       limit: 10,
-      dense: false
+      dense: false,
+      libs:[]
     };
   },
   methods: {
     loadMore(index, done) {
-      const append = libs.slice(
+       return axios.get('/libraries.json', { baseURL: window.location.origin })
+        .then((response) => { 
+         const append = response.data.slice(
         this.libraries.length,
         this.libraries.length + this.limit
       );
       this.libraries = this.libraries.concat(append);
-      done();
-    }
+      done();   })
+        .catch((error) => {
+            throw error.response.data;
+        });
+}
   },
   computed: {
     filteredList: function() {
@@ -89,7 +94,7 @@ export default {
           );
       });
     }
-  }
+  },
 };
 </script>
 
