@@ -7,7 +7,7 @@
       placeholder="Поиск библиотеки"
     />
     <q-infinite-scroll
-      @load="loadMore"
+    @load="loadMore"
       :offset="250"
       class="flex wrap justify-between items-stretch  q-pa-md"
     >
@@ -46,7 +46,7 @@
         </q-card>
       </div>
       <template v-slot:loading>
-        <div class="row justify-center q-my-md">
+        <div class="spinner">
           <q-spinner-dots color="primary" size="40px" />
         </div>
       </template>
@@ -55,47 +55,44 @@
 </template>
 <script>
 import axios from "axios";
-
+import { mapState, mapMutations, mapActions} from "vuex";
 export default {
   name: "PageIndex",
   data() {
     return {
-      libraries: [],
       search: "",
-      limit: 10,
       dense: false,
-      libs:[]
     };
   },
-  methods: {
-    loadMore(index, done) {
-       return axios.get('/libraries.json', { baseURL: window.location.origin })
-        .then((response) => { 
-         const append = response.data.slice(
-        this.libraries.length,
-        this.libraries.length + this.limit
-      );
-      this.libraries = this.libraries.concat(append);
-      done();   })
-        .catch((error) => {
-            throw error.response.data;
-        });
-}
+  async created() {
+  this.$store.dispatch("GET_DATA")
+  },
+  mounted() {
   },
   computed: {
-    filteredList: function() {
-      var comp = this.search;
-      return this.libraries.filter(function(elem) {
-        if (comp === "") return true;
-        else
+     ...mapState(["libraries","initialLibraries"]),
+     filteredList: function() {
+      let comp = this.search
+      return this.initialLibraries.filter(function(elem) {
           return (
             elem.nativeName.indexOf(comp) > -1 ||
-            elem.data.general.address.fullAddress.indexOf(comp) > -1
+            elem.data.general.address.fullAddress.indexOf(comp) > -1 
+            
           );
       });
     }
+
   },
-};
+  methods: {
+   loadMore(index, done) {
+      setTimeout(() => {
+        this.$store.commit("ADD_LIBRARIES")
+        done()
+      }, 2000)   
+   }
+}
+}
+
 </script>
 
 <style>
@@ -113,5 +110,13 @@ a {
 
 .address {
   min-height: 80px;
+}
+
+.spinner {
+  position: fixed;
+  left:50%;
+  right:50%;
+  top: 50%;
+  bottom: 0;
 }
 </style>
