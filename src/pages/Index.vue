@@ -7,7 +7,7 @@
       placeholder="Поиск библиотеки"
     />
     <q-infinite-scroll
-    @load="loadMore"
+      @load="loadMore"
       :offset="250"
       class="flex wrap justify-between items-stretch  q-pa-md"
     >
@@ -55,46 +55,41 @@
 </template>
 <script>
 import axios from "axios";
-import { mapState, mapMutations, mapActions} from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 export default {
   name: "PageIndex",
   data() {
     return {
       search: "",
-      dense: false,
+      dense: false
     };
   },
   async created() {
-  this.$store.dispatch("GET_DATA")
+    this.$store.dispatch("GET_DATA");
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
-     ...mapState(["libraries","initialLibraries"]),
-     filteredList: function() {
-      let comp = this.search
+    ...mapState(["libraries", "initialLibraries"]),
+    filteredList: function() {
+      let comp = this.search;
       return this.initialLibraries.filter(function(elem) {
-          return (
-            elem.nativeName.indexOf(comp) > -1 ||
-            elem.data.general.address.fullAddress.indexOf(comp) > -1 
-            
-          );
+        return (
+          elem.nativeName.indexOf(comp) > -1 ||
+          elem.data.general.address.fullAddress.indexOf(comp) > -1
+        );
       });
     }
-
   },
   methods: {
-   loadMore(index, done) {
+    loadMore(index, done) {
       setTimeout(() => {
-        this.$store.commit("ADD_LIBRARIES")
-        done()
-      }, 2000)   
-   }
-}
-}
-
+        this.$store.commit("ADD_LIBRARIES");
+        done();
+      }, 2000);
+    }
+  }
+};
 </script>
-
 <style>
 .form-control {
   margin: 0 auto;
@@ -114,8 +109,8 @@ a {
 
 .spinner {
   position: fixed;
-  left:50%;
-  right:50%;
+  left: 50%;
+  right: 50%;
   top: 50%;
   bottom: 0;
 }

@@ -22,6 +22,7 @@ export default function () {
           state.initialLibraries = payload.slice(0,14);
           state.librariesCity = [...new Set(state.initialLibraries.map(item => item.data.general.locale.name))];
       },
+      
       ADD_LIBRARIES: function(state) {
           const append = state.libraries.slice(
           state.initialLibraries.length,
