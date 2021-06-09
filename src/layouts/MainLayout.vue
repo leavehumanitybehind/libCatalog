@@ -1,17 +1,16 @@
 <template>
-<q-layout>
+  <q-layout>
     <q-page-container>
       <router-view />
     </q-page-container>
-    </q-layout>
+  </q-layout>
 </template>
 
 <script>
 export default {
-  name: 'MainLayout',
-  data () {
-    return {
-    }
+  name: "MainLayout",
+  data() {
+    return {};
   }
-}
+};
 </script>
